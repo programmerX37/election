@@ -86,8 +86,8 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        {/* Previous Elections Card */}
-        {settings.previous_elections.length > 0 && (
+        {/* Previous Elections Card - Fix for the undefined 'length' error */}
+        {settings && settings.previous_elections && settings.previous_elections.length > 0 && (
           <Card className="w-full hover:shadow-lg transition-all duration-300 cursor-pointer" onClick={() => navigate('/results')}>
             <CardHeader>
               <CardTitle className="text-center">Previous Elections</CardTitle>
