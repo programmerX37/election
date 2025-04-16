@@ -14,7 +14,6 @@ const Index = () => {
   const [isEditingName, setIsEditingName] = useState(false);
   const navigate = useNavigate();
 
-  // Redirect if already logged in
   useEffect(() => {
     if (admin) {
       navigate('/admin-dashboard');
@@ -24,10 +23,10 @@ const Index = () => {
   }, [admin, voter, navigate]);
 
   const handleChangeElectionName = () => {
-    if (electionName.trim()) {
-      updateSettings({ election_name: electionName.trim() });
-      setIsEditingName(false);
-    }
+    const finalElectionName = electionName.trim() || "Election";
+    updateSettings({ election_name: finalElectionName });
+    setIsEditingName(false);
+    setElectionName('');
   };
 
   const handleCardClick = (path: string) => {
@@ -86,7 +85,6 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Election Name Input */}
           {settings.election_status === 'not_started' && (
             <div className="max-w-md mx-auto mb-12">
               <div className="flex flex-col gap-4">
@@ -99,10 +97,9 @@ const Index = () => {
                 />
                 <Button 
                   onClick={() => {
-                    if (electionName.trim()) {
-                      updateSettings({ election_name: electionName.trim() });
-                      startElection();
-                    }
+                    const finalElectionName = electionName.trim() || "Election";
+                    updateSettings({ election_name: finalElectionName });
+                    startElection();
                   }}
                   className="flex items-center justify-center gap-2"
                   disabled={!electionName.trim()}
@@ -115,7 +112,6 @@ const Index = () => {
           )}
 
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Admin Portal Card */}
             <Card 
               className="card-hover cursor-pointer" 
               onClick={() => handleCardClick('/admin-login')}
@@ -139,7 +135,6 @@ const Index = () => {
               </CardFooter>
             </Card>
 
-            {/* Voter Portal Card */}
             <Card 
               className="card-hover cursor-pointer" 
               onClick={() => handleCardClick('/voter-login')}
@@ -164,7 +159,6 @@ const Index = () => {
               </CardFooter>
             </Card>
 
-            {/* Results Card */}
             <Card 
               className="card-hover cursor-pointer" 
               onClick={() => settings.results_visible && handleCardClick('/results')}
@@ -191,7 +185,6 @@ const Index = () => {
             </Card>
           </div>
 
-          {/* Previous Election Results */}
           {settings.previous_elections && settings.previous_elections.length > 0 && (
             <div className="mt-16">
               <h2 className="text-2xl font-bold text-center mb-6">Previous Elections</h2>
