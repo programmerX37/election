@@ -72,7 +72,7 @@ const Index = () => {
           <CardContent className="space-y-4">
             <input 
               type="text" 
-              placeholder="Enter Election Name" 
+              placeholder="Enter the name of the Election" 
               value={electionName}
               onChange={(e) => setElectionName(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
