@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,11 +6,12 @@ import { Input } from '@/components/ui/input';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
-import { UserIcon, ShieldIcon, BarChart3, PlayIcon } from 'lucide-react';
+import { UserIcon, ShieldIcon, BarChart3, PlayIcon, PenIcon } from 'lucide-react';
 
 const Index = () => {
   const { settings, voter, admin, updateSettings, startElection } = useElection();
   const [electionName, setElectionName] = useState('');
+  const [isEditingName, setIsEditingName] = useState(false);
   const navigate = useNavigate();
 
   // Redirect if already logged in
@@ -23,10 +23,10 @@ const Index = () => {
     }
   }, [admin, voter, navigate]);
 
-  const handleStartElection = () => {
+  const handleChangeElectionName = () => {
     if (electionName.trim()) {
       updateSettings({ election_name: electionName.trim() });
-      startElection();
+      setIsEditingName(false);
     }
   };
 
@@ -41,10 +41,47 @@ const Index = () => {
       <main className="flex-1">
         <section className="container py-12 md:py-24">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-election-primary">
-              {settings.election_name || "Election"}
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-election-primary">
+                {settings.election_name || "Election"}
+              </h1>
+              {!isEditingName && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => setIsEditingName(true)}
+                >
+                  <PenIcon className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+            {isEditingName && (
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <Input
+                  type="text"
+                  placeholder="Enter the name of the Election"
+                  value={electionName}
+                  onChange={(e) => setElectionName(e.target.value)}
+                  className="max-w-md"
+                />
+                <Button 
+                  onClick={handleChangeElectionName}
+                  disabled={!electionName.trim()}
+                >
+                  Save
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditingName(false);
+                    setElectionName('');
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mt-4">
               A secure and transparent platform for managing elections with real-time results.
             </p>
           </div>
