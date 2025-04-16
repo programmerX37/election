@@ -26,7 +26,7 @@ const Header = () => {
             className="text-2xl font-bold text-election-primary cursor-pointer" 
             onClick={() => navigate('/')}
           >
-            Election Hub
+            Election
           </h1>
         </div>
 

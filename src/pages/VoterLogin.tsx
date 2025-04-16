@@ -41,10 +41,6 @@ const VoterLogin = () => {
       const success = loginVoter(usn, password);
       
       if (success) {
-        toast({
-          title: "Login successful",
-          description: "Welcome to the voting portal",
-        });
         navigate('/voter-dashboard');
       } else {
         toast({
@@ -85,8 +81,8 @@ const VoterLogin = () => {
           <Card>
             <CardHeader className="text-center">
               <UserIcon className="w-12 h-12 mx-auto text-election-secondary mb-4" />
-              <CardTitle>Voter Login</CardTitle>
-              <CardDescription>Access the voting portal</CardDescription>
+              <CardTitle>Voter Portal</CardTitle>
+              <CardDescription>Access the voting platform</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit}>

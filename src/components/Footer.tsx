@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="flex items-center space-x-2 mb-4 sm:mb-0">
             <VoteIcon className="h-5 w-5 text-election-primary" />
             <span className="text-sm font-medium text-election-primary">
-              Election Hub © {new Date().getFullYear()}
+              Election © {new Date().getFullYear()}
             </span>
           </div>
           <div className="text-sm text-muted-foreground">

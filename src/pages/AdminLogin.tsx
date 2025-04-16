@@ -34,10 +34,6 @@ const AdminLogin = () => {
       const success = loginAdmin(username, password);
       
       if (success) {
-        toast({
-          title: "Login successful",
-          description: "Welcome to the admin dashboard",
-        });
         navigate('/admin-dashboard');
       } else {
         toast({
@@ -78,7 +74,7 @@ const AdminLogin = () => {
           <Card>
             <CardHeader className="text-center">
               <ShieldIcon className="w-12 h-12 mx-auto text-election-primary mb-4" />
-              <CardTitle>Admin Login</CardTitle>
+              <CardTitle>Admin Portal</CardTitle>
               <CardDescription>Access the election management dashboard</CardDescription>
             </CardHeader>
             <CardContent>
