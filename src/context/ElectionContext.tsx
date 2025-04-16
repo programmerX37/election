@@ -32,8 +32,8 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [voters, setVoters] = useState<db.Voter[]>([]);
   const [settings, setSettings] = useState<db.Settings>({
     election_status: 'not_started',
-    election_name: '',
     results_visible: false,
+    election_name: '',
     previous_elections: []
   });
 

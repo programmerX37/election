@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -109,7 +108,7 @@ const Index = () => {
                   disabled={!electionName.trim()}
                 >
                   <PlayIcon className="w-4 h-4" />
-                  Start Election
+                  Change Election Name
                 </Button>
               </div>
             </div>
