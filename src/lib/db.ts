@@ -24,17 +24,9 @@ export interface Candidate {
 
 export type ElectionStatus = 'not_started' | 'ongoing' | 'ended';
 
-export interface PreviousElection {
-  name: string;
-  end_date: string;
-  winners: string[];
-}
-
 export interface Settings {
   election_status: ElectionStatus;
   results_visible: boolean;
-  election_name: string;
-  previous_elections: PreviousElection[];
 }
 
 // Initialize database
@@ -60,9 +52,7 @@ const initializeDB = () => {
   if (!localStorage.getItem('settings')) {
     localStorage.setItem('settings', JSON.stringify({
       election_status: 'not_started',
-      results_visible: false,
-      election_name: '',
-      previous_elections: []
+      results_visible: false
     }));
   }
 };
