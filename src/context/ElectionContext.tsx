@@ -21,6 +21,7 @@ interface ElectionContextType {
   startElection: () => void;
   endElection: () => void;
   updateSettings: (updates: Partial<db.Settings>) => void;
+  updateElectionSettings: (settings: db.Settings) => void;
 }
 
 const ElectionContext = createContext<ElectionContextType | undefined>(undefined);
@@ -125,6 +126,10 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setSettings(updatedSettings);
   };
 
+  const updateElectionSettings = (updatedSettings: db.Settings) => {
+    setSettings(updatedSettings);
+  };
+
   const value = {
     admin,
     voter,
@@ -143,7 +148,8 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     submitVote,
     startElection,
     endElection,
-    updateSettings
+    updateSettings,
+    updateElectionSettings
   };
 
   return <ElectionContext.Provider value={value}>{children}</ElectionContext.Provider>;
