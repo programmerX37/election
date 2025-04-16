@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -98,7 +99,12 @@ const Index = () => {
                   className="text-center"
                 />
                 <Button 
-                  onClick={handleStartElection}
+                  onClick={() => {
+                    if (electionName.trim()) {
+                      updateSettings({ election_name: electionName.trim() });
+                      startElection();
+                    }
+                  }}
                   className="flex items-center justify-center gap-2"
                   disabled={!electionName.trim()}
                 >
