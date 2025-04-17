@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -23,7 +24,7 @@ const Index = () => {
   }, [admin, voter, navigate]);
 
   const handleChangeElectionName = () => {
-    const finalElectionName = electionName.trim() || "Election";
+    const finalElectionName = `${electionName.trim()} Election`.trim() || "Election";
     updateSettings({ election_name: finalElectionName });
     setIsEditingName(false);
     setElectionName('');
@@ -97,7 +98,7 @@ const Index = () => {
                 />
                 <Button 
                   onClick={() => {
-                    const finalElectionName = electionName.trim() || "Election";
+                    const finalElectionName = `${electionName.trim()} Election`.trim() || "Election";
                     updateSettings({ election_name: finalElectionName });
                     startElection();
                   }}
@@ -105,7 +106,7 @@ const Index = () => {
                   disabled={!electionName.trim()}
                 >
                   <PlayIcon className="w-4 h-4" />
-                  Change Election Name
+                  Start Election
                 </Button>
               </div>
             </div>
