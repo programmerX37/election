@@ -15,7 +15,7 @@ import { useElection } from '@/context/ElectionContext';
 import { Candidate } from '@/lib/db';
 import { 
   UserPlus, PlusCircle, Play, StopCircle, 
-  UserCheck, Users, ListChecks, BarChart3 
+  UserCheck, Users, ListChecks, BarChart3, RotateCcw 
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -29,7 +29,8 @@ const AdminDashboard = () => {
     deleteCandidate,
     bulkAddVoters,
     startElection,
-    endElection
+    endElection,
+    resetElection
   } = useElection();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [candidateName, setCandidateName] = useState('');
@@ -38,6 +39,7 @@ const AdminDashboard = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isStartElectionDialogOpen, setIsStartElectionDialogOpen] = useState(false);
   const [isEndElectionDialogOpen, setIsEndElectionDialogOpen] = useState(false);
+  const [isResetElectionDialogOpen, setIsResetElectionDialogOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -192,6 +194,15 @@ const AdminDashboard = () => {
       description: "Results are now available to view",
     });
     setIsEndElectionDialogOpen(false);
+  };
+
+  const handleResetElection = () => {
+    resetElection();
+    toast({
+      title: "Election reset",
+      description: "The election has been reset to its initial state",
+    });
+    setIsResetElectionDialogOpen(false);
   };
 
   const resetForm = () => {
@@ -378,6 +389,39 @@ const AdminDashboard = () => {
                     >
                       View Results
                     </Button>
+                  )}
+                  
+                  {(settings.election_status === 'ongoing' || settings.election_status === 'ended') && (
+                    <>
+                      <Button 
+                        variant="outline"
+                        className="w-full flex items-center"
+                        onClick={() => setIsResetElectionDialogOpen(true)}
+                      >
+                        <RotateCcw className="h-4 w-4 mr-2" /> Reset Election
+                      </Button>
+                      
+                      <AlertDialog 
+                        open={isResetElectionDialogOpen} 
+                        onOpenChange={setIsResetElectionDialogOpen}
+                      >
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Reset the Election?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will reset the election to its initial state. All votes will be cleared
+                              and the election will be set to "Not Started". This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleResetElection}>
+                              Reset Election
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </>
                   )}
                 </CardContent>
               </Card>

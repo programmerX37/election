@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as db from '@/lib/db';
 
@@ -20,6 +19,7 @@ interface ElectionContextType {
   submitVote: (candidateId: number) => void;
   startElection: () => void;
   endElection: () => void;
+  resetElection: () => void;
   updateSettings: (updates: Partial<db.Settings>) => void;
 }
 
@@ -37,7 +37,6 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     previous_elections: []
   });
 
-  // Initialize and load data
   useEffect(() => {
     setCandidates(db.getCandidates());
     setVoters(db.getVoters());
@@ -103,7 +102,6 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       db.updateVoterStatus(voter.id, true);
       db.incrementVote(candidateId);
       
-      // Update local state
       setVoter({ ...voter, has_voted: true });
       setCandidates(db.getCandidates());
       setVoters(db.getVoters());
@@ -118,6 +116,17 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const endElection = () => {
     const updatedSettings = db.endElection();
     setSettings(updatedSettings);
+  };
+
+  const resetElection = () => {
+    const updatedSettings = db.resetElection();
+    setSettings(updatedSettings);
+    
+    const resetCandidates = db.resetCandidateVotes();
+    setCandidates(resetCandidates);
+    
+    const resetVoters = db.resetVoterStatus();
+    setVoters(resetVoters);
   };
 
   const updateSettings = (updates: Partial<db.Settings>) => {
@@ -143,6 +152,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     submitVote,
     startElection,
     endElection,
+    resetElection,
     updateSettings
   };
 

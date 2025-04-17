@@ -1,4 +1,3 @@
-
 // Mock database using localStorage
 
 // Types
@@ -124,6 +123,17 @@ export const updateVoterStatus = (id: number, has_voted: boolean): void => {
   localStorage.setItem('voters', JSON.stringify(updatedVoters));
 };
 
+export const resetVoterStatus = (): Voter[] => {
+  const voters = getVoters();
+  const resetVoters = voters.map(voter => ({
+    ...voter,
+    has_voted: false
+  }));
+  
+  localStorage.setItem('voters', JSON.stringify(resetVoters));
+  return resetVoters;
+};
+
 // Candidate functions
 export const getCandidates = (): Candidate[] => {
   return JSON.parse(localStorage.getItem('candidates') || '[]');
@@ -174,6 +184,17 @@ export const incrementVote = (candidateId: number): void => {
   localStorage.setItem('candidates', JSON.stringify(updatedCandidates));
 };
 
+export const resetCandidateVotes = (): Candidate[] => {
+  const candidates = getCandidates();
+  const resetCandidates = candidates.map(candidate => ({
+    ...candidate,
+    votes: 0
+  }));
+  
+  localStorage.setItem('candidates', JSON.stringify(resetCandidates));
+  return resetCandidates;
+};
+
 // Settings functions
 export const getSettings = (): Settings => {
   return JSON.parse(localStorage.getItem('settings') || '{}') as Settings;
@@ -206,6 +227,13 @@ export const endElection = (): Settings => {
     election_status: 'ended',
     results_visible: true,
     previous_elections: [...currentSettings.previous_elections, previousElection]
+  });
+};
+
+export const resetElection = (): Settings => {
+  return updateSettings({ 
+    election_status: 'not_started',
+    results_visible: false
   });
 };
 

@@ -8,13 +8,14 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
-import { UserIcon, ShieldIcon, BarChart3, PlayIcon, PenIcon } from 'lucide-react';
+import { UserIcon, ShieldIcon, BarChart3, PlayIcon, PenIcon, RotateCcwIcon } from 'lucide-react';
 
 const Index = () => {
-  const { settings, voter, admin, updateSettings, startElection } = useElection();
+  const { settings, voter, admin, updateSettings, startElection, resetElection } = useElection();
   const [electionName, setElectionName] = useState('');
   const [isEditingName, setIsEditingName] = useState(false);
   const [isStartDialogOpen, setIsStartDialogOpen] = useState(false);
+  const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +39,11 @@ const Index = () => {
     startElection();
     setElectionName('');
     setIsStartDialogOpen(false);
+  };
+
+  const handleResetElection = () => {
+    resetElection();
+    setIsResetDialogOpen(false);
   };
 
   const handleCardClick = (path: string) => {
@@ -131,6 +137,35 @@ const Index = () => {
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
+            </div>
+          )}
+
+          {(settings.election_status === 'ongoing' || settings.election_status === 'ended') && (
+            <div className="max-w-md mx-auto mb-12">
+              <Button 
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2"
+                onClick={() => setIsResetDialogOpen(true)}
+              >
+                <RotateCcwIcon className="w-4 h-4" />
+                Reset Election
+              </Button>
+              
+              <AlertDialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Reset the Election?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will reset the election to its initial state. All votes will be cleared and the election will be set to "Not Started".
+                      This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleResetElection}>Reset Election</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           )}
 
