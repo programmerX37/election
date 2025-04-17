@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
@@ -27,6 +28,13 @@ const Index = () => {
     const finalElectionName = `${electionName.trim()} Election`.trim() || "Election";
     updateSettings({ election_name: finalElectionName });
     setIsEditingName(false);
+    setElectionName('');
+  };
+
+  const handleStartElection = () => {
+    const finalElectionName = `${electionName.trim()} Election`.trim() || "Election";
+    updateSettings({ election_name: finalElectionName });
+    startElection();
     setElectionName('');
   };
 
@@ -96,18 +104,30 @@ const Index = () => {
                   onChange={(e) => setElectionName(e.target.value)}
                   className="text-center"
                 />
-                <Button 
-                  onClick={() => {
-                    const finalElectionName = `${electionName.trim()} Election`.trim() || "Election";
-                    updateSettings({ election_name: finalElectionName });
-                    startElection();
-                  }}
-                  className="flex items-center justify-center gap-2"
-                  disabled={!electionName.trim()}
-                >
-                  <PlayIcon className="w-4 h-4" />
-                  Start Election
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      className="flex items-center justify-center gap-2"
+                      disabled={!electionName.trim()}
+                    >
+                      <PlayIcon className="w-4 h-4" />
+                      Start Election
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Start the Election?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will start the election with the name "{electionName.trim() ? `${electionName.trim()} Election` : "Election"}". 
+                        Once started, voters will be able to cast their votes.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleStartElection}>Start Election</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           )}
