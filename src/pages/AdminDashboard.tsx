@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -42,7 +41,6 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Redirect if not logged in as admin
   useEffect(() => {
     if (!admin) {
       navigate('/admin-login');
@@ -313,7 +311,10 @@ const AdminDashboard = () => {
                         <Play className="h-4 w-4 mr-2" /> Start Election
                       </Button>
                       
-                      <AlertDialog open={isStartElectionDialogOpen} onOpenChange={setIsStartElectionDialogOpen}>
+                      <AlertDialog 
+                        open={isStartElectionDialogOpen} 
+                        onOpenChange={setIsStartElectionDialogOpen}
+                      >
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Start the Election?</AlertDialogTitle>
@@ -324,7 +325,9 @@ const AdminDashboard = () => {
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleStartElection}>Start Election</AlertDialogAction>
+                            <AlertDialogAction onClick={handleStartElection}>
+                              Start Election
+                            </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
@@ -340,7 +343,10 @@ const AdminDashboard = () => {
                         <StopCircle className="h-4 w-4 mr-2" /> End Election
                       </Button>
                       
-                      <AlertDialog open={isEndElectionDialogOpen} onOpenChange={setIsEndElectionDialogOpen}>
+                      <AlertDialog 
+                        open={isEndElectionDialogOpen} 
+                        onOpenChange={setIsEndElectionDialogOpen}
+                      >
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>End the Election?</AlertDialogTitle>
@@ -351,7 +357,9 @@ const AdminDashboard = () => {
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleEndElection}>End Election</AlertDialogAction>
+                            <AlertDialogAction onClick={handleEndElection}>
+                              End Election
+                            </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
