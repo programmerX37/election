@@ -14,6 +14,7 @@ const Index = () => {
   const { settings, voter, admin, updateSettings, startElection } = useElection();
   const [electionName, setElectionName] = useState('');
   const [isEditingName, setIsEditingName] = useState(false);
+  const [isStartDialogOpen, setIsStartDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const Index = () => {
     updateSettings({ election_name: finalElectionName });
     startElection();
     setElectionName('');
+    setIsStartDialogOpen(false);
   };
 
   const handleCardClick = (path: string) => {
@@ -104,16 +106,16 @@ const Index = () => {
                   onChange={(e) => setElectionName(e.target.value)}
                   className="text-center"
                 />
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button 
-                      className="flex items-center justify-center gap-2"
-                      disabled={!electionName.trim()}
-                    >
-                      <PlayIcon className="w-4 h-4" />
-                      Start Election
-                    </Button>
-                  </AlertDialogTrigger>
+                <Button 
+                  className="flex items-center justify-center gap-2"
+                  disabled={!electionName.trim()}
+                  onClick={() => setIsStartDialogOpen(true)}
+                >
+                  <PlayIcon className="w-4 h-4" />
+                  Start Election
+                </Button>
+                
+                <AlertDialog open={isStartDialogOpen} onOpenChange={setIsStartDialogOpen}>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>Start the Election?</AlertDialogTitle>

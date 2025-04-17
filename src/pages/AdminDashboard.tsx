@@ -37,6 +37,8 @@ const AdminDashboard = () => {
   const [candidateParty, setCandidateParty] = useState('');
   const [editingCandidate, setEditingCandidate] = useState<Candidate | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isStartElectionDialogOpen, setIsStartElectionDialogOpen] = useState(false);
+  const [isEndElectionDialogOpen, setIsEndElectionDialogOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -182,6 +184,7 @@ const AdminDashboard = () => {
       title: "Election started",
       description: "Voters can now cast their votes",
     });
+    setIsStartElectionDialogOpen(false);
   };
 
   const handleEndElection = () => {
@@ -190,6 +193,7 @@ const AdminDashboard = () => {
       title: "Election ended",
       description: "Results are now available to view",
     });
+    setIsEndElectionDialogOpen(false);
   };
 
   const resetForm = () => {
@@ -300,54 +304,58 @@ const AdminDashboard = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {settings.election_status === 'not_started' ? (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button 
-                          className="w-full flex items-center" 
-                          disabled={settings.election_status !== 'not_started'}
-                        >
-                          <Play className="h-4 w-4 mr-2" /> Start Election
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Start the Election?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will start the election and allow voters to cast their votes. 
-                            You won't be able to add or edit candidates after starting.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={handleStartElection}>Start Election</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <>
+                      <Button 
+                        className="w-full flex items-center" 
+                        disabled={settings.election_status !== 'not_started'}
+                        onClick={() => setIsStartElectionDialogOpen(true)}
+                      >
+                        <Play className="h-4 w-4 mr-2" /> Start Election
+                      </Button>
+                      
+                      <AlertDialog open={isStartElectionDialogOpen} onOpenChange={setIsStartElectionDialogOpen}>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Start the Election?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will start the election and allow voters to cast their votes. 
+                              You won't be able to add or edit candidates after starting.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleStartElection}>Start Election</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </>
                   ) : settings.election_status === 'ongoing' ? (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button 
-                          className="w-full flex items-center" 
-                          variant="destructive"
-                          disabled={settings.election_status !== 'ongoing'}
-                        >
-                          <StopCircle className="h-4 w-4 mr-2" /> End Election
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>End the Election?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will end the election and prevent any more votes from being cast.
-                            Results will be made public automatically.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={handleEndElection}>End Election</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <>
+                      <Button 
+                        className="w-full flex items-center" 
+                        variant="destructive"
+                        disabled={settings.election_status !== 'ongoing'}
+                        onClick={() => setIsEndElectionDialogOpen(true)}
+                      >
+                        <StopCircle className="h-4 w-4 mr-2" /> End Election
+                      </Button>
+                      
+                      <AlertDialog open={isEndElectionDialogOpen} onOpenChange={setIsEndElectionDialogOpen}>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>End the Election?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will end the election and prevent any more votes from being cast.
+                              Results will be made public automatically.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleEndElection}>End Election</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </>
                   ) : (
                     <Button disabled className="w-full">
                       Election Completed
