@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
 import { UserIcon, ShieldIcon, BarChart3, PlayIcon, PenIcon, RotateCcwIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+
 const Index = () => {
   const {
     settings,
@@ -123,7 +124,7 @@ const Index = () => {
             </div>}
 
           {settings.election_status === 'ongoing' && <div className="mt-12 text-center mb-6">
-            <Button variant="outline" onClick={() => setIsResetDialogOpen(true)} className="w-full flex items-end center justify-center gap-2">
+            <Button variant="outline" className="w-full flex items-center justify-center gap-2" onClick={() => setIsResetDialogOpen(true)}>
               <RotateCcwIcon className="w-4 h-4" />
               Reset Election
             </Button>
@@ -244,4 +245,5 @@ const Index = () => {
       <Footer />
     </div>;
 };
+
 export default Index;
