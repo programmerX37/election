@@ -176,7 +176,7 @@ const Index = () => {
                 </p>
               </CardContent>
               <CardFooter className="flex justify-center pt-0">
-                <Button className="w-full" disabled={settings.election_status !== 'ongoing'}>
+                <Button disabled={settings.election_status !== 'ongoing'} className="w-full my-[20px]">
                   Voter Login
                 </Button>
               </CardFooter>
