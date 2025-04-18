@@ -123,40 +123,6 @@ const Index = () => {
               </div>
             </div>}
 
-          {settings.election_status === 'ongoing' && <div className="mt-12 text-center mb-6">
-            <Button variant="outline" className="w-full flex items-center justify-center gap-2" onClick={() => setIsResetDialogOpen(true)}>
-              <RotateCcwIcon className="w-4 h-4" />
-              Reset Election
-            </Button>
-            
-            <AlertDialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Reset the Election?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will reset the election to its initial state. All votes will be cleared and the election will be set to "Not Started".
-                    This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleResetElection}>Reset Election</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>}
-
-          {/* Swap the order here - Election Status now comes before the Reset Election button */}
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-muted">
-              <span className={`h-3 w-3 rounded-full ${settings.election_status === 'not_started' ? 'bg-muted-foreground animate-pulse-slow' : settings.election_status === 'ongoing' ? 'bg-election-success animate-pulse-slow' : 'bg-election-secondary'}`}></span>
-              <span className="text-4xl font-normal">
-                Election Status: {' '}
-                {settings.election_status === 'not_started' ? 'Not Started' : settings.election_status === 'ongoing' ? 'Ongoing' : 'Ended'}
-              </span>
-            </div>
-          </div>
-
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <Card className="card-hover cursor-pointer" onClick={() => handleCardClick('/admin-login')}>
               <CardHeader className="text-center">
@@ -230,15 +196,29 @@ const Index = () => {
               </div>
             </div>}
 
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-muted">
-              <span className={`h-3 w-3 rounded-full ${settings.election_status === 'not_started' ? 'bg-muted-foreground animate-pulse-slow' : settings.election_status === 'ongoing' ? 'bg-election-success animate-pulse-slow' : 'bg-election-secondary'}`}></span>
-              <span className="text-4xl font-normal">
-                Election Status: {' '}
-                {settings.election_status === 'not_started' ? 'Not Started' : settings.election_status === 'ongoing' ? 'Ongoing' : 'Ended'}
-              </span>
-            </div>
-          </div>
+          {settings.election_status === 'ongoing' && <div className="mt-12 text-center">
+            <Button variant="outline" className="w-full flex items-center justify-center gap-2" onClick={() => setIsResetDialogOpen(true)}>
+              <RotateCcwIcon className="w-4 h-4" />
+              Reset Election
+            </Button>
+            
+            <AlertDialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reset the Election?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will reset the election to its initial state. All votes will be cleared and the election will be set to "Not Started".
+                    This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleResetElection}>Reset Election</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>}
+
         </section>
       </main>
       
