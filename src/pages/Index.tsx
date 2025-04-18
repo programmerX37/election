@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
 import { UserIcon, ShieldIcon, BarChart3, PlayIcon, PenIcon, RotateCcwIcon } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
 const Index = () => {
   const { settings, voter, admin, updateSettings, startElection, resetElection } = useElection();
@@ -17,6 +17,7 @@ const Index = () => {
   const [isStartDialogOpen, setIsStartDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (admin) {
@@ -39,11 +40,21 @@ const Index = () => {
     startElection();
     setElectionName('');
     setIsStartDialogOpen(false);
+    
+    toast({
+      title: "Election Started",
+      description: "The election has been successfully started."
+    });
   };
 
   const handleResetElection = () => {
     resetElection();
     setIsResetDialogOpen(false);
+    
+    toast({
+      title: "Election Reset",
+      description: "The election has been reset to its initial state."
+    });
   };
 
   const handleCardClick = (path: string) => {

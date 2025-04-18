@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -167,6 +167,7 @@ const AdminDashboard = () => {
         description: "Add at least one candidate first",
         variant: "destructive",
       });
+      setIsStartElectionDialogOpen(false);
       return;
     }
     
@@ -176,6 +177,7 @@ const AdminDashboard = () => {
         description: "Add voters first",
         variant: "destructive",
       });
+      setIsStartElectionDialogOpen(false);
       return;
     }
     
@@ -226,8 +228,8 @@ const AdminDashboard = () => {
             }`}></span>
             <span className="text-sm font-medium">
               {settings.election_status === 'not_started' ? 'Election Not Started' : 
-               settings.election_status === 'ongoing' ? 'Election Ongoing' : 
-               'Election Ended'}
+              settings.election_status === 'ongoing' ? 'Election Ongoing' : 
+              'Election Ended'}
             </span>
           </div>
         </div>
@@ -257,7 +259,7 @@ const AdminDashboard = () => {
           </TabsList>
           
           <TabsContent value="dashboard" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid md:grid-cols-2 gap-4">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xl">Candidates</CardTitle>
