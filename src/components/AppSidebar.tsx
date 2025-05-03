@@ -13,15 +13,17 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarSeparator
+  SidebarSeparator,
+  useSidebar
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, Vote, Users, BarChart3, Settings, ClipboardList, LogOut } from 'lucide-react';
+import { LayoutDashboard, Vote, Users, BarChart3, Settings, ClipboardList, LogOut, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const AppSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { admin, voter, logoutAdmin, logoutVoter } = useElection();
+  const { toggleSidebar } = useSidebar();
 
   const handleLogout = () => {
     if (admin) {
@@ -39,9 +41,19 @@ export const AppSidebar = () => {
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
-        <div className="flex items-center px-4 py-3">
-          <Vote className="h-8 w-8 text-election-primary mr-2" />
-          <h1 className="text-2xl font-heading font-bold text-election-primary">GovVote</h1>
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center">
+            <Vote className="h-8 w-8 text-election-primary mr-2" />
+            <h1 className="text-2xl font-heading font-bold text-election-primary">GovVote</h1>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleSidebar} 
+            className="md:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
         </div>
       </SidebarHeader>
       
