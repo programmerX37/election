@@ -34,10 +34,8 @@ const VoterDashboard = () => {
         title: "Already voted",
         description: "You have already cast your vote",
       });
-      setTimeout(() => {
-        logoutVoter();
-        navigate('/');
-      }, 3000);
+      // Don't automatically logout and redirect when they've already voted
+      // Let them view the thank you screen
     }
   }, [voter, settings.election_status, navigate, toast, logoutVoter]);
 
@@ -50,14 +48,12 @@ const VoterDashboard = () => {
         description: "Your vote has been recorded successfully",
       });
       
-      setTimeout(() => {
-        logoutVoter();
-        navigate('/');
-      }, 3000);
+      // Don't logout and redirect automatically
+      // The user will see the "thank you" screen with the dashboard content
     }
   };
 
-  // If voter has already voted, show the thank you screen
+  // If voter has already voted, show the thank you screen with dashboard
   if (voter?.has_voted) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -71,8 +67,18 @@ const VoterDashboard = () => {
               <CardDescription>Your vote has been recorded</CardDescription>
             </CardHeader>
             <CardContent className="text-center">
-              <p className="mb-6">You will be automatically logged out and redirected to the home page.</p>
-              <Button onClick={() => navigate('/')}>Return to Home</Button>
+              <p className="mb-6">You are now viewing your voter dashboard.</p>
+              <div className="flex flex-col space-y-4">
+                {settings.results_visible && (
+                  <Button onClick={() => navigate('/results')}>View Results</Button>
+                )}
+                <Button variant="outline" onClick={() => {
+                  logoutVoter();
+                  navigate('/');
+                }}>
+                  Logout
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </main>
