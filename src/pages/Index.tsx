@@ -7,7 +7,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
-import { UserIcon, ShieldIcon, BarChart3, PlayIcon, PenIcon, RotateCcwIcon } from 'lucide-react';
+import { UserIcon, ShieldIcon, BarChart3, PlayIcon, RotateCcwIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const Index = () => {
@@ -20,30 +20,30 @@ const Index = () => {
     resetElection
   } = useElection();
   const [electionName, setElectionName] = useState('');
-  const [isEditingName, setIsEditingName] = useState(false);
   const [isStartDialogOpen, setIsStartDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const navigate = useNavigate();
   const {
     toast
   } = useToast();
+  
   useEffect(() => {
     if (admin) {
       navigate('/admin-dashboard');
     } else if (voter) {
       navigate('/voter-dashboard');
     }
-  }, [admin, voter, navigate]);
-  const handleChangeElectionName = () => {
-    const finalElectionName = `${electionName.trim()} Election`.trim() || "Election";
-    updateSettings({
-      election_name: finalElectionName
-    });
-    setIsEditingName(false);
-    setElectionName('');
-  };
+    
+    // Set default election name if none exists
+    if (!settings.election_name) {
+      updateSettings({
+        election_name: "GovVote Election"
+      });
+    }
+  }, [admin, voter, navigate, settings.election_name, updateSettings]);
+  
   const handleStartElection = () => {
-    const finalElectionName = `${electionName.trim()} Election`.trim() || "Election";
+    const finalElectionName = `${electionName.trim()} Election`.trim() || "GovVote Election";
     updateSettings({
       election_name: finalElectionName
     });
@@ -55,6 +55,7 @@ const Index = () => {
       description: "The election has been successfully started."
     });
   };
+  
   const handleResetElection = () => {
     resetElection();
     setIsResetDialogOpen(false);
@@ -63,35 +64,20 @@ const Index = () => {
       description: "The election has been reset to its initial state."
     });
   };
+  
   const handleCardClick = (path: string) => {
     navigate(path);
   };
+  
   return <div className="flex flex-col min-h-screen">
       <Header />
       
       <main className="flex-1">
         <section className="container py-12 md:py-24">
           <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-4">
-              <h1 className="text-4xl md:text-5xl font-bold text-election-primary">
-                {settings.election_name || "Election"}
-              </h1>
-              {!isEditingName && <Button variant="ghost" size="icon" onClick={() => setIsEditingName(true)}>
-                  <PenIcon className="w-4 h-4" />
-                </Button>}
-            </div>
-            {isEditingName && <div className="flex items-center justify-center gap-2 mt-4">
-                <Input type="text" placeholder="Enter the name of the Election" value={electionName} onChange={e => setElectionName(e.target.value)} className="max-w-md" />
-                <Button onClick={handleChangeElectionName} disabled={!electionName.trim()}>
-                  Save
-                </Button>
-                <Button variant="outline" onClick={() => {
-              setIsEditingName(false);
-              setElectionName('');
-            }}>
-                  Cancel
-                </Button>
-              </div>}
+            <h1 className="text-4xl md:text-5xl font-bold text-election-primary">
+              {settings.election_name || "GovVote Election"}
+            </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mt-4">
               A secure and transparent platform for managing elections with real-time results.
             </p>
@@ -110,7 +96,7 @@ const Index = () => {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Start the Election?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will start the election with the name "{electionName.trim() ? `${electionName.trim()} Election` : "Election"}". 
+                        This will start the election with the name "{electionName.trim() ? `${electionName.trim()} Election` : "GovVote Election"}". 
                         Once started, voters will be able to cast their votes.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
