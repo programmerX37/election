@@ -22,8 +22,6 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ElectionProvider>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
         <SidebarProvider>
           <BrowserRouter>
             <div className="flex min-h-screen w-full">
@@ -41,6 +39,8 @@ const App = () => (
               </div>
             </div>
           </BrowserRouter>
+          <Toaster />
+          <Sonner />
         </SidebarProvider>
       </TooltipProvider>
     </ElectionProvider>
