@@ -19,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+				heading: ['Outfit', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -64,12 +68,13 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				election: {
-					primary: '#1A365D',
-					secondary: '#E53E3E',
-					accent: '#ECC94B',
-					muted: '#F7FAFC',
-					success: '#38A169',
-					warning: '#DD6B20',
+					primary: '#10B981', // Light green like in the image
+					secondary: '#1F2937', // Dark text
+					accent: '#34D399', // Lighter green for hover states
+					muted: '#F3F4F6',
+					success: '#10B981',
+					warning: '#F59E0B',
+					"light-bg": '#F5FBF8', // Very light green bg like in sidebar
 				}
 			},
 			borderRadius: {
