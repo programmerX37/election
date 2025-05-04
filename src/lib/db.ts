@@ -1,3 +1,4 @@
+
 // Mock database using localStorage
 
 // Types
@@ -197,7 +198,14 @@ export const resetCandidateVotes = (): Candidate[] => {
 
 // Settings functions
 export const getSettings = (): Settings => {
-  return JSON.parse(localStorage.getItem('settings') || '{}') as Settings;
+  const settings = JSON.parse(localStorage.getItem('settings') || '{}') as Settings;
+  
+  // Ensure previous_elections is always an array
+  if (!settings.previous_elections) {
+    settings.previous_elections = [];
+  }
+  
+  return settings;
 };
 
 export const updateSettings = (updates: Partial<Settings>): Settings => {
@@ -214,8 +222,14 @@ export const startElection = (): Settings => {
 
 export const endElection = (): Settings => {
   const currentSettings = getSettings();
+  
+  // Ensure previous_elections exists and is an array
+  if (!currentSettings.previous_elections) {
+    currentSettings.previous_elections = [];
+  }
+  
   const previousElection: PreviousElection = {
-    name: currentSettings.election_name,
+    name: currentSettings.election_name || `Election ${currentSettings.previous_elections.length + 1}`,
     end_date: new Date().toISOString(),
     winners: getCandidates()
       .sort((a, b) => b.votes - a.votes)

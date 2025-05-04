@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as db from '@/lib/db';
 
@@ -114,11 +115,15 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const endElection = () => {
-    const updatedSettings = db.endElection();
-    setSettings(updatedSettings);
-    
-    // Ensure candidates are refreshed with latest vote counts
-    setCandidates(db.getCandidates());
+    try {
+      const updatedSettings = db.endElection();
+      setSettings(updatedSettings);
+      
+      // Ensure candidates are refreshed with latest vote counts
+      setCandidates(db.getCandidates());
+    } catch (error) {
+      console.error("Error ending election:", error);
+    }
   };
 
   const resetElection = () => {
