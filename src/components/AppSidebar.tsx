@@ -16,18 +16,38 @@ import {
   SidebarSeparator,
   useSidebar
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, Vote, Users, BarChart3, Settings, ClipboardList, Menu } from 'lucide-react';
+import { LayoutDashboard, Vote, Users, BarChart3, Settings, Menu, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { useState, useEffect } from 'react';
 
 export const AppSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { admin, voter } = useElection();
   const { toggleSidebar } = useSidebar();
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const isActive = (path: string) => {
     return location.pathname === path;
   };
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    localStorage.setItem('theme', newTheme);
+  };
+
+  useEffect(() => {
+    // Check for saved theme preference or use system preference
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    setTheme(initialTheme);
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+  }, []);
 
   return (
     <Sidebar className="border-r">
@@ -117,13 +137,20 @@ export const AppSidebar = () => {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  isActive={false}
-                  tooltip="Logs"
-                >
-                  <ClipboardList />
-                  <span>Logs</span>
-                </SidebarMenuButton>
+                <div className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    {theme === 'light' ? (
+                      <Sun className="h-4 w-4" />
+                    ) : (
+                      <Moon className="h-4 w-4" />
+                    )}
+                    <span className="text-sm">Theme: {theme === 'light' ? 'Light' : 'Dark'}</span>
+                  </div>
+                  <Switch 
+                    checked={theme === 'dark'}
+                    onCheckedChange={toggleTheme}
+                  />
+                </div>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

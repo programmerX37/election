@@ -1,64 +1,63 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 150 54% 98%; /* Light green background */
-    --foreground: 222 47% 11%; /* Dark text */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 152 75% 40%; /* Main green */
-    --primary-foreground: 150 54% 98%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
 
-    --accent: 150 54% 85%; /* Light green accent */
-    --accent-foreground: 222 47% 11%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 152 75% 40%;
+    --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
 
+    /* Sidebar variables */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 152 75% 40%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 150 54% 94%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 150 54% 90%;
-    --sidebar-ring: 152 75% 40%;
+    --sidebar-foreground: 222.2 84% 4.9%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-primary: 142.1 76.2% 36.3%;
+    --sidebar-primary-foreground: 355.7 100% 97.3%;
+    --sidebar-accent: 220 14.3% 95.9%;
+    --sidebar-accent-foreground: 220.9 39.3% 11%;
+    --sidebar-ring: 222.2 84% 4.9%;
   }
 
   .dark {
-    --background: 222 47% 11%;
+    --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 11%;
+    --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 11%;
+    --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 152 75% 40%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -75,69 +74,24 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    
-    --sidebar-background: 222 47% 11%;
+
+    /* Dark sidebar variables */
+    --sidebar-background: 222.2 84% 4.9%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 152 75% 40%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 15%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-primary: 142.1 70.6% 45.3%;
+    --sidebar-primary-foreground: 144.9 80.4% 10%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 47% 15%;
-    --sidebar-ring: 152 75% 40%;
+    --sidebar-ring: 212.7 26.8% 83.9%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-
-  html {
-    @apply font-sans;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-semibold;
-  }
-
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.card-hover {
-  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
-}
-
-.election-gradient {
-  @apply bg-gradient-to-r from-election-primary via-election-primary to-election-accent;
-}
-
-/* GovVote style overrides */
-.govvote-card {
-  @apply rounded-lg bg-white p-6 shadow-sm border border-gray-100;
-}
-
-.govvote-section-title {
-  @apply text-xl font-heading font-medium text-election-secondary mb-4;
-}
-
-.govvote-breadcrumb {
-  @apply flex items-center gap-2 mb-6 text-gray-500;
-}
-
-.govvote-breadcrumb-separator {
-  @apply text-gray-300;
-}
-
-.govvote-sidebar-link {
-  @apply flex items-center gap-3 px-3 py-2 rounded-md font-medium transition-colors;
-}
-
-.govvote-sidebar-link.active {
-  @apply bg-election-accent text-election-primary;
-}
-
-.govvote-sidebar-link:not(.active) {
-  @apply text-gray-600 hover:bg-gray-100;
 }
