@@ -16,7 +16,7 @@ import {
   SidebarSeparator,
   useSidebar
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, Vote, Users, BarChart3, Settings, Menu, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, Vote, Users, BarChart3, Sun, Moon, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useState, useEffect } from 'react';
@@ -123,19 +123,9 @@ export const AppSidebar = () => {
         <SidebarSeparator />
 
         <SidebarGroup>
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupLabel>Preferences</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton 
-                  isActive={false}
-                  tooltip="Settings"
-                >
-                  <Settings />
-                  <span>Settings</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
               <SidebarMenuItem>
                 <div className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer">
                   <div className="flex items-center gap-2">

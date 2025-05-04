@@ -75,8 +75,8 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    /* Dark sidebar variables */
-    --sidebar-background: 222.2 84% 4.9%;
+    /* Dark sidebar variables - improved for better contrast */
+    --sidebar-background: 222.2 47% 11%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-border: 217.2 32.6% 17.5%;
     --sidebar-primary: 142.1 70.6% 45.3%;
