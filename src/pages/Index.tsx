@@ -1,10 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
 import { UserIcon, ShieldIcon, BarChart3, RotateCcwIcon } from 'lucide-react';
@@ -53,13 +51,11 @@ const Index = () => {
   };
   
   return <div className="flex flex-col min-h-screen">
-      <Header />
-      
       <main className="flex-1">
-        <section className="container py-12 md:py-24">
+        <section className="container py-0 md:py-12">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-election-primary">
-              {settings.election_name || "GovVote Election"}
+            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent">
+              GovVote
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mt-4">
               A secure and transparent platform for managing elections with real-time results.
@@ -69,7 +65,7 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <Card className="card-hover cursor-pointer" onClick={() => handleCardClick('/admin-login')}>
               <CardHeader className="text-center">
-                <ShieldIcon className="w-12 h-12 mx-auto text-election-primary mb-4" />
+                <ShieldIcon className="w-12 h-12 mx-auto bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent mb-4" />
                 <CardTitle>Admin Portal</CardTitle>
                 <CardDescription>Manage candidates and voters</CardDescription>
               </CardHeader>

@@ -1,4 +1,3 @@
-
 import { VoteIcon } from 'lucide-react';
 
 const Footer = () => {
@@ -7,9 +6,9 @@ const Footer = () => {
       <div className="container">
         <div className="flex flex-col sm:flex-row items-center justify-between">
           <div className="flex items-center space-x-2 mb-4 sm:mb-0">
-            <VoteIcon className="h-5 w-5 text-election-primary" />
-            <span className="text-sm font-medium text-election-primary">
-              Election © {new Date().getFullYear()}
+            <VoteIcon className="h-5 w-5 bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent" />
+            <span className="text-sm font-medium bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent">
+              GovVote
             </span>
           </div>
           <div className="text-sm text-muted-foreground">

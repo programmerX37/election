@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -21,7 +20,7 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
-				heading: ['Outfit', 'sans-serif'],
+				heading: ['PT Serif', 'serif'],
 			},
 			colors: {
 				border: {

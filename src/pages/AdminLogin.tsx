@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -73,7 +72,7 @@ const AdminLogin = () => {
           
           <Card>
             <CardHeader className="text-center">
-              <ShieldIcon className="w-12 h-12 mx-auto text-election-primary mb-4" />
+              <ShieldIcon className="w-12 h-12 mx-auto bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent mb-4" />
               <CardTitle>Admin Portal</CardTitle>
               <CardDescription>Access the election management dashboard</CardDescription>
             </CardHeader>

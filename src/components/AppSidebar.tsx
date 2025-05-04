@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useElection } from '@/context/ElectionContext';
@@ -16,7 +15,7 @@ import {
   SidebarSeparator,
   useSidebar
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, Vote, Users, BarChart3, Sun, Moon, Menu } from 'lucide-react';
+import { LayoutDashboard, Users, BarChart3, Sun, Moon, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useState, useEffect } from 'react';
@@ -52,25 +51,24 @@ export const AppSidebar = () => {
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center">
-            <Vote className="h-8 w-8 text-election-primary mr-2" />
-            <h1 className="text-2xl font-heading font-bold text-election-primary">GovVote</h1>
-          </div>
+        <div className="flex items-center gap-4 px-4 py-3">
           <Button 
             variant="ghost" 
             size="icon" 
-            onClick={toggleSidebar} 
-            className="md:hidden"
+            onClick={toggleSidebar}
+            className="p-2 hover:bg-election-accent/10"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-6 w-6 bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent" />
           </Button>
+          <h1 className="text-2xl font-bold font-heading bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent">
+            GovVote
+          </h1>
         </div>
       </SidebarHeader>
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
+          <SidebarGroupLabel className="font-heading">Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -78,6 +76,7 @@ export const AppSidebar = () => {
                   isActive={isActive('/')}
                   onClick={() => navigate('/')}
                   tooltip="Dashboard"
+                  className="font-heading"
                 >
                   <LayoutDashboard />
                   <span>Dashboard</span>
@@ -89,8 +88,8 @@ export const AppSidebar = () => {
                   isActive={isActive('/admin-dashboard')}
                   onClick={() => navigate('/admin-dashboard')}
                   tooltip="Elections"
+                  className="font-heading"
                 >
-                  <Vote />
                   <span>Elections</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -100,6 +99,7 @@ export const AppSidebar = () => {
                   isActive={isActive('/voter-login')}
                   onClick={() => navigate('/voter-login')}
                   tooltip="Voters"
+                  className="font-heading"
                 >
                   <Users />
                   <span>Voters</span>
@@ -111,6 +111,7 @@ export const AppSidebar = () => {
                   isActive={isActive('/results')}
                   onClick={() => navigate('/results')}
                   tooltip="Results"
+                  className="font-heading"
                 >
                   <BarChart3 />
                   <span>Results</span>
@@ -123,11 +124,11 @@ export const AppSidebar = () => {
         <SidebarSeparator />
 
         <SidebarGroup>
-          <SidebarGroupLabel>Preferences</SidebarGroupLabel>
+          <SidebarGroupLabel className="font-heading">Preferences</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <div className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer">
+                <div className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-sidebar-accent cursor-pointer font-heading">
                   <div className="flex items-center gap-2">
                     {theme === 'light' ? (
                       <Sun className="h-4 w-4" />
@@ -148,11 +149,11 @@ export const AppSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="px-3 py-2">
+        <div className="px-3 py-3">
           <div className="flex items-center px-2">
-            <div className="flex flex-col">
-              <span className="font-medium text-sm">Alex Morgan</span>
-              <span className="text-xs text-muted-foreground">Admin</span>
+            <div className="flex flex-col space-y-1">
+              <span className="font-bold text-sm dark:text-election-primary/80 font-heading">Shri Gyanesh Kumar</span>
+              <span className="font-semibold text-xs text-muted-foreground dark:text-election-primary/60 font-heading">Election Commissioner</span>
             </div>
           </div>
         </div>

@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -51,7 +50,7 @@ const Results = () => {
             variant="ghost" 
             size="sm" 
             onClick={() => navigate('/')}
-            className="flex items-center text-muted-foreground"
+            className="flex items-center text-muted-foreground font-heading"
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Home
@@ -59,8 +58,8 @@ const Results = () => {
         </div>
         
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">Election Results</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold mb-2 font-heading">GovVote</h1>
+          <p className="text-muted-foreground font-heading">
             Final standings and statistics
           </p>
         </div>
@@ -69,14 +68,14 @@ const Results = () => {
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Election Statistics</CardTitle>
-                <CardDescription>Overview of the voting process</CardDescription>
+                <CardTitle className="font-heading">Election Statistics</CardTitle>
+                <CardDescription className="font-heading">Overview of the voting process</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Voter Participation</span>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm font-medium font-heading">Voter Participation</span>
+                    <span className="text-sm text-muted-foreground font-heading">
                       {voters.filter(v => v.has_voted).length} / {voters.length} voters
                     </span>
                   </div>
@@ -84,13 +83,13 @@ const Results = () => {
                     value={voters.length ? (voters.filter(v => v.has_voted).length / voters.length) * 100 : 0} 
                     className="h-2"
                   />
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-sm text-muted-foreground mt-2 font-heading">
                     {voters.length ? Math.round((voters.filter(v => v.has_voted).length / voters.length) * 100) : 0}% of registered voters participated
                   </p>
                 </div>
                 
                 <div className="h-64">
-                  <p className="text-sm font-medium mb-2">Vote Distribution</p>
+                  <p className="text-sm font-medium mb-2 font-heading">Vote Distribution</p>
                   {totalVotes > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -114,13 +113,13 @@ const Results = () => {
                     </ResponsiveContainer>
                   ) : (
                     <div className="h-full flex items-center justify-center">
-                      <p className="text-muted-foreground">No votes recorded</p>
+                      <p className="text-muted-foreground font-heading">No votes recorded</p>
                     </div>
                   )}
                 </div>
                 
                 <div className="pt-4">
-                  <h3 className="text-lg font-medium mb-2">Winners</h3>
+                  <h3 className="text-lg font-medium mb-2 font-heading">Winners</h3>
                   {winners.length > 0 ? (
                     <div className="space-y-2">
                       {winners.map(winner => (
@@ -130,20 +129,20 @@ const Results = () => {
                         >
                           <Trophy className="h-5 w-5 flex-shrink-0 text-election-accent" />
                           <div>
-                            <p className="font-medium">{winner.name}</p>
-                            <p className="text-sm text-muted-foreground">{winner.party}</p>
+                            <p className="font-medium font-heading">{winner.name}</p>
+                            <p className="text-sm text-muted-foreground font-heading">{winner.party}</p>
                           </div>
-                          <div className="ml-auto font-bold">{winner.votes} votes</div>
+                          <div className="ml-auto font-bold font-heading">{winner.votes} votes</div>
                         </div>
                       ))}
                       {winners.length > 1 && (
-                        <p className="text-sm text-muted-foreground mt-2 italic">
+                        <p className="text-sm text-muted-foreground mt-2 italic font-heading">
                           There is a tie between multiple candidates.
                         </p>
                       )}
                     </div>
                   ) : (
-                    <p className="text-muted-foreground">No winners to display</p>
+                    <p className="text-muted-foreground font-heading">No winners to display</p>
                   )}
                 </div>
               </CardContent>
@@ -153,13 +152,13 @@ const Results = () => {
           <div className="lg:col-span-3">
             <Card>
               <CardHeader>
-                <CardTitle>Candidate Rankings</CardTitle>
-                <CardDescription>Complete results for all candidates</CardDescription>
+                <CardTitle className="font-heading">Candidate Rankings</CardTitle>
+                <CardDescription className="font-heading">Complete results for all candidates</CardDescription>
               </CardHeader>
               <CardContent>
                 {candidates.length === 0 ? (
                   <div className="text-center py-12">
-                    <p className="text-muted-foreground">No candidates available.</p>
+                    <p className="text-muted-foreground font-heading">No candidates available.</p>
                   </div>
                 ) : (
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">

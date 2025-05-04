@@ -62,11 +62,11 @@ const VoterDashboard = () => {
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
               <CheckCircle2 className="h-16 w-16 text-election-success mx-auto mb-4" />
-              <CardTitle className="text-2xl">Thank You!</CardTitle>
-              <CardDescription>Your vote has been recorded</CardDescription>
+              <CardTitle className="text-2xl font-heading">Thank You!</CardTitle>
+              <CardDescription className="font-heading">Your vote has been recorded</CardDescription>
             </CardHeader>
             <CardContent className="text-center">
-              <p className="mb-6">You are now viewing your voter dashboard.</p>
+              <p className="mb-6 font-heading">You are now viewing your voter dashboard.</p>
               <div className="flex flex-col space-y-4">
                 {settings.results_visible && (
                   <Button onClick={() => navigate('/results')}>View Results</Button>
@@ -93,8 +93,8 @@ const VoterDashboard = () => {
       
       <main className="flex-1 container py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">Cast Your Vote</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold mb-2 font-heading">Cast Your Vote</h1>
+          <p className="text-muted-foreground font-heading">
             Select a candidate and confirm your choice
           </p>
         </div>
@@ -140,8 +140,8 @@ const VoterDashboard = () => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Confirm Your Vote</AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogTitle className="font-heading">Confirm Your Vote</AlertDialogTitle>
+                <AlertDialogDescription className="font-heading">
                   Are you sure you want to cast your vote? This action cannot be undone.
                   {selectedCandidate !== null && (
                     <div className="mt-4 p-3 bg-muted rounded-md">

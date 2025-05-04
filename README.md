@@ -71,3 +71,19 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## Security Updates
+
+We have recently addressed several moderate severity vulnerabilities in the project. The vulnerabilities were related to `esbuild` (version <=0.24.2) and allowed websites to send requests to the development server and read responses. We have resolved this issue by forcing all dependencies to use the secure version of `esbuild` (0.24.3).
+
+The changes made to `package.json` are as follows:
+
+```json
+"devDependencies": {
+  // ... other dependencies ...
+  "esbuild": "^0.24.3"
+},
+"resolutions": {
+  "esbuild": "^0.24.3"
+}
+```

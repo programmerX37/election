@@ -31,7 +31,8 @@ const AdminDashboard = () => {
     startElection,
     endElection,
     resetElection,
-    updateSettings
+    updateSettings,
+    logoutAdmin
   } = useElection();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [candidateName, setCandidateName] = useState('');
@@ -188,6 +189,8 @@ const AdminDashboard = () => {
       description: "Voters can now cast their votes",
     });
     setIsStartElectionDialogOpen(false);
+    logoutAdmin();
+    navigate('/');
   };
 
   const handleEndElection = () => {
@@ -227,14 +230,14 @@ const AdminDashboard = () => {
       
       <main className="flex-1 container py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-election-primary">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold font-heading bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent">GovVote</h1>
           <div className="flex items-center space-x-2">
             <span className={`h-3 w-3 rounded-full ${
               settings.election_status === 'not_started' ? 'bg-muted-foreground' : 
               settings.election_status === 'ongoing' ? 'bg-election-success animate-pulse-slow' : 
               'bg-election-secondary'
             }`}></span>
-            <span className="text-sm font-medium">
+            <span className="text-sm font-medium font-heading">
               {settings.election_status === 'not_started' ? 'Election Not Started' : 
               settings.election_status === 'ongoing' ? 'Election Ongoing' : 
               'Election Ended'}
