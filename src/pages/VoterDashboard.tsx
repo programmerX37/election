@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -48,8 +47,8 @@ const VoterDashboard = () => {
         description: "Your vote has been recorded successfully",
       });
       
-      // Don't logout and redirect automatically
-      // The user will see the "thank you" screen with the dashboard content
+      // Redirect to voter portal after successfully voting
+      navigate('/');
     }
   };
 

@@ -191,6 +191,14 @@ const AdminDashboard = () => {
 
   const handleEndElection = () => {
     endElection();
+    
+    // Immediately update the local state to ensure UI reflects the changes
+    setSettings({
+      ...settings,
+      election_status: 'ended',
+      results_visible: true
+    });
+    
     toast({
       title: "Election ended",
       description: "Results are now available to view",

@@ -116,6 +116,9 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const endElection = () => {
     const updatedSettings = db.endElection();
     setSettings(updatedSettings);
+    
+    // Ensure candidates are refreshed with latest vote counts
+    setCandidates(db.getCandidates());
   };
 
   const resetElection = () => {
