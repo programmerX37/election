@@ -1,13 +1,13 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useElection } from '@/context/ElectionContext';
-import { UserIcon, ShieldIcon, BarChart3, PlayIcon, RotateCcwIcon } from 'lucide-react';
+import { UserIcon, ShieldIcon, BarChart3, RotateCcwIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const Index = () => {
@@ -16,11 +16,8 @@ const Index = () => {
     voter,
     admin,
     updateSettings,
-    startElection,
     resetElection
   } = useElection();
-  const [electionName, setElectionName] = useState('');
-  const [isStartDialogOpen, setIsStartDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const navigate = useNavigate();
   const {
@@ -41,20 +38,6 @@ const Index = () => {
       });
     }
   }, [admin, voter, navigate, settings.election_name, updateSettings]);
-  
-  const handleStartElection = () => {
-    const finalElectionName = `${electionName.trim()} Election`.trim() || "GovVote Election";
-    updateSettings({
-      election_name: finalElectionName
-    });
-    startElection();
-    setElectionName('');
-    setIsStartDialogOpen(false);
-    toast({
-      title: "Election Started",
-      description: "The election has been successfully started."
-    });
-  };
   
   const handleResetElection = () => {
     resetElection();
@@ -82,32 +65,6 @@ const Index = () => {
               A secure and transparent platform for managing elections with real-time results.
             </p>
           </div>
-
-          {settings.election_status === 'not_started' && <div className="max-w-md mx-auto mb-12">
-              <div className="flex flex-col gap-4">
-                <Input type="text" placeholder="Enter election name" value={electionName} onChange={e => setElectionName(e.target.value)} className="text-center" />
-                <Button className="flex items-center justify-center gap-2" disabled={!electionName.trim()} onClick={() => setIsStartDialogOpen(true)}>
-                  <PlayIcon className="w-4 h-4" />
-                  Start Election
-                </Button>
-                
-                <AlertDialog open={isStartDialogOpen} onOpenChange={setIsStartDialogOpen}>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Start the Election?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will start the election with the name "{electionName.trim() ? `${electionName.trim()} Election` : "GovVote Election"}". 
-                        Once started, voters will be able to cast their votes.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleStartElection}>Start Election</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            </div>}
 
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <Card className="card-hover cursor-pointer" onClick={() => handleCardClick('/admin-login')}>

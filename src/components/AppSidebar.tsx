@@ -16,23 +16,14 @@ import {
   SidebarSeparator,
   useSidebar
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, Vote, Users, BarChart3, Settings, ClipboardList, LogOut, Menu } from 'lucide-react';
+import { LayoutDashboard, Vote, Users, BarChart3, Settings, ClipboardList, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const AppSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { admin, voter, logoutAdmin, logoutVoter } = useElection();
+  const { admin, voter } = useElection();
   const { toggleSidebar } = useSidebar();
-
-  const handleLogout = () => {
-    if (admin) {
-      logoutAdmin();
-    } else if (voter) {
-      logoutVoter();
-    }
-    navigate('/');
-  };
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -141,22 +132,11 @@ export const AppSidebar = () => {
 
       <SidebarFooter>
         <div className="px-3 py-2">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center px-2">
-              <div className="flex flex-col">
-                <span className="font-medium text-sm">Alex Morgan</span>
-                <span className="text-xs text-muted-foreground">Admin</span>
-              </div>
+          <div className="flex items-center px-2">
+            <div className="flex flex-col">
+              <span className="font-medium text-sm">Alex Morgan</span>
+              <span className="text-xs text-muted-foreground">Admin</span>
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleLogout} 
-              className="w-full justify-start"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
           </div>
         </div>
       </SidebarFooter>
