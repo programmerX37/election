@@ -30,7 +30,8 @@ const AdminDashboard = () => {
     bulkAddVoters,
     startElection,
     endElection,
-    resetElection
+    resetElection,
+    updateSettings
   } = useElection();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [candidateName, setCandidateName] = useState('');
@@ -192,9 +193,8 @@ const AdminDashboard = () => {
   const handleEndElection = () => {
     endElection();
     
-    // Immediately update the local state to ensure UI reflects the changes
-    setSettings({
-      ...settings,
+    // Update local state via updateSettings to ensure UI reflects the changes immediately
+    updateSettings({
       election_status: 'ended',
       results_visible: true
     });
