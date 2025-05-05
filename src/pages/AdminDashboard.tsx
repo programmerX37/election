@@ -51,6 +51,9 @@ const AdminDashboard = () => {
     }
   }, [admin, navigate]);
 
+  // Add a safeguard to ensure voters is always an array
+  const votersArray = Array.isArray(voters) ? voters : [];
+
   const handleCreateCandidate = (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -136,7 +139,7 @@ const AdminDashboard = () => {
 
   const handleBulkAddVoters = async () => {
     try {
-      const remainingSlots = 69 - voters.length;
+      const remainingSlots = 69 - votersArray.length;
       
       if (remainingSlots <= 0) {
         toast({
@@ -173,7 +176,7 @@ const AdminDashboard = () => {
       return;
     }
     
-    if (voters.length === 0) {
+    if (votersArray.length === 0) {
       toast({
         title: "Cannot start election",
         description: "Add voters first",
@@ -287,7 +290,7 @@ const AdminDashboard = () => {
                   <CardDescription>Total registered voters</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold">{voters.length} / 69</div>
+                  <div className="text-3xl font-bold">{votersArray.length} / 69</div>
                 </CardContent>
               </Card>
               
@@ -298,7 +301,7 @@ const AdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">
-                    {voters.filter(v => v.has_voted).length} / {voters.length}
+                    {votersArray.filter(v => v.has_voted).length} / {votersArray.length}
                   </div>
                 </CardContent>
               </Card>
@@ -508,7 +511,7 @@ const AdminDashboard = () => {
                   
                   <Button 
                     className="w-full flex items-center" 
-                    disabled={settings.election_status !== 'not_started' || voters.length >= 69}
+                    disabled={settings.election_status !== 'not_started' || votersArray.length >= 69}
                     onClick={handleBulkAddVoters}
                   >
                     <UserPlus className="h-4 w-4 mr-2" /> Generate Voter Accounts
@@ -593,7 +596,7 @@ const AdminDashboard = () => {
               <h2 className="text-xl font-bold">Manage Voters</h2>
               <Button 
                 className="flex items-center" 
-                disabled={settings.election_status !== 'not_started' || voters.length >= 69}
+                disabled={settings.election_status !== 'not_started' || votersArray.length >= 69}
                 onClick={handleBulkAddVoters}
               >
                 <UserPlus className="h-4 w-4 mr-2" /> Generate Voter Accounts
@@ -604,11 +607,11 @@ const AdminDashboard = () => {
               <CardHeader>
                 <CardTitle>Voter List</CardTitle>
                 <CardDescription>
-                  Total registered voters: {voters.length} / 69 (Voted: {voters.filter(v => v.has_voted).length})
+                  Total registered voters: {votersArray.length} / 69 (Voted: {votersArray.filter(v => v.has_voted).length})
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {voters.length === 0 ? (
+                {votersArray.length === 0 ? (
                   <div className="text-center py-6">
                     <p className="text-muted-foreground">No voters added yet.</p>
                   </div>
@@ -620,7 +623,7 @@ const AdminDashboard = () => {
                       <div>Status</div>
                     </div>
                     <div className="max-h-[400px] overflow-y-auto">
-                      {voters.map((voter) => (
+                      {votersArray.map((voter) => (
                         <div key={voter.id} className="grid grid-cols-3 p-3 border-t">
                           <div>{voter.usn}</div>
                           <div className="font-mono">{voter.password}</div>

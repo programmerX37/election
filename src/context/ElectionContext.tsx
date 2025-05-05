@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as db from '@/lib/db';
 import { toast } from "@/components/ui/use-toast";
@@ -150,12 +149,18 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const bulkAddVoters = async (count: number) => {
     try {
       const newVoters = await db.bulkAddVoters(count);
+      // Ensure we always have an array of voters
       const updatedVoters = await db.getVoters();
-      setVoters(updatedVoters);
+      setVoters(updatedVoters || []);
       return newVoters;
     } catch (error) {
       console.error("Error adding voters in bulk:", error);
-      throw error;
+      toast({
+        title: "Error",
+        description: "Failed to add voters. Please try again.",
+        variant: "destructive"
+      });
+      return [];
     }
   };
 

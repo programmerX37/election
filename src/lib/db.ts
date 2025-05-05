@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 // Types
@@ -52,7 +51,8 @@ export const validateAdminLogin = async (username: string, password: string): Pr
 export const getVoters = async (): Promise<Voter[]> => {
   try {
     const response = await axios.get('/api/voters');
-    return response.data;
+    // Ensure we always return an array
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("Error getting voters:", error);
     return [];
@@ -72,7 +72,8 @@ export const addVoter = async (voter: { usn: string; password: string }): Promis
 export const bulkAddVoters = async (count: number): Promise<Voter[]> => {
   try {
     const response = await axios.post('/api/voters/bulk', { count });
-    return response.data;
+    // Ensure we always return an array
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("Error adding voters in bulk:", error);
     return [];
@@ -101,7 +102,8 @@ export const updateVoterStatus = async (id: number, has_voted: boolean): Promise
 export const resetVoterStatus = async (): Promise<Voter[]> => {
   try {
     const response = await axios.put('/api/voters/reset');
-    return response.data;
+    // Ensure we always return an array
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("Error resetting voter status:", error);
     return [];
