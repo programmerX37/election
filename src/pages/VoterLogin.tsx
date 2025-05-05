@@ -33,12 +33,12 @@ const VoterLogin = () => {
     }
   }, [settings.election_status, voter, navigate, toast]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      const success = loginVoter(usn, password);
+      const success = await loginVoter(usn, password);
       
       if (success) {
         navigate('/voter-dashboard');

@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as db from '@/lib/db';
 import { toast } from "@/components/ui/use-toast";
@@ -48,8 +49,8 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           db.getSettings()
         ]);
         
-        setCandidates(candidatesData);
-        setVoters(votersData);
+        setCandidates(candidatesData || []);
+        setVoters(votersData || []);
         setSettings(settingsData);
       } catch (error) {
         console.error("Failed to fetch initial data:", error);
@@ -69,8 +70,9 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const isValid = await db.validateAdminLogin(username, password);
       if (isValid) {
         setAdmin({ id: 1, username, password });
+        return true;
       }
-      return isValid;
+      return false;
     } catch (error) {
       console.error("Admin login error:", error);
       return false;
@@ -103,7 +105,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const newCandidate = await db.addCandidate(candidate);
       const updatedCandidates = await db.getCandidates();
-      setCandidates(updatedCandidates);
+      setCandidates(updatedCandidates || []);
       return newCandidate;
     } catch (error) {
       console.error("Error adding candidate:", error);
@@ -138,7 +140,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const newVoter = await db.addVoter(voter);
       const updatedVoters = await db.getVoters();
-      setVoters(updatedVoters);
+      setVoters(updatedVoters || []);
       return newVoter;
     } catch (error) {
       console.error("Error adding voter:", error);
@@ -152,7 +154,7 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // Ensure we always have an array of voters
       const updatedVoters = await db.getVoters();
       setVoters(updatedVoters || []);
-      return newVoters;
+      return newVoters || [];
     } catch (error) {
       console.error("Error adding voters in bulk:", error);
       toast({
@@ -178,8 +180,8 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           db.getVoters()
         ]);
         
-        setCandidates(updatedCandidates);
-        setVoters(updatedVoters);
+        setCandidates(updatedCandidates || []);
+        setVoters(updatedVoters || []);
       }
     } catch (error) {
       console.error("Error submitting vote:", error);

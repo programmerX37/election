@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -25,12 +26,12 @@ const AdminLogin = () => {
     }
   }, [admin, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      const success = loginAdmin(username, password);
+      const success = await loginAdmin(username, password);
       
       if (success) {
         navigate('/admin-dashboard');
