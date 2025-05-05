@@ -134,7 +134,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleBulkAddVoters = () => {
+  const handleBulkAddVoters = async () => {
     try {
       const remainingSlots = 69 - voters.length;
       
@@ -147,7 +147,7 @@ const AdminDashboard = () => {
         return;
       }
       
-      const addedVoters = bulkAddVoters(remainingSlots);
+      const addedVoters = await bulkAddVoters(remainingSlots);
       
       toast({
         title: "Success",
