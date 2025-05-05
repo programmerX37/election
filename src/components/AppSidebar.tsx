@@ -58,7 +58,7 @@ export const AppSidebar = () => {
             onClick={toggleSidebar}
             className="p-2 hover:bg-election-accent/10"
           >
-            <Menu className="h-6 w-6 bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent" />
+            <Menu className="h-6 w-6 text-election-primary" />
           </Button>
           <h1 className="text-2xl font-bold font-heading bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent">
             GovVote

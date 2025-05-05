@@ -1,5 +1,4 @@
-
-// Mock database using localStorage
+import axios from 'axios';
 
 // Types
 export interface Admin {
@@ -37,228 +36,91 @@ export interface Settings {
   previous_elections: PreviousElection[];
 }
 
-// Initialize database
-const initializeDB = () => {
-  // Admin
-  if (!localStorage.getItem('admin')) {
-    localStorage.setItem('admin', JSON.stringify([
-      { id: 1, username: 'admin', password: 'admin123' }
-    ]));
-  }
-
-  // Voters (initially empty)
-  if (!localStorage.getItem('voters')) {
-    localStorage.setItem('voters', JSON.stringify([]));
-  }
-
-  // Candidates (initially empty)
-  if (!localStorage.getItem('candidates')) {
-    localStorage.setItem('candidates', JSON.stringify([]));
-  }
-
-  // Settings
-  if (!localStorage.getItem('settings')) {
-    localStorage.setItem('settings', JSON.stringify({
-      election_status: 'not_started',
-      results_visible: false,
-      election_name: '',
-      previous_elections: []
-    }));
-  }
-};
-
 // Admin functions
-export const validateAdminLogin = (username: string, password: string): boolean => {
-  const admins = JSON.parse(localStorage.getItem('admin') || '[]') as Admin[];
-  return admins.some(admin => admin.username === username && admin.password === password);
+export const validateAdminLogin = async (username: string, password: string): Promise<boolean> => {
+  const response = await axios.post('/api/admin/login', { username, password });
+  return response.data.success;
 };
 
 // Voter functions
-export const getVoters = (): Voter[] => {
-  return JSON.parse(localStorage.getItem('voters') || '[]');
+export const getVoters = async (): Promise<any[]> => {
+  const response = await axios.get('/api/voters');
+  return response.data;
 };
 
-export const addVoter = (voter: Omit<Voter, 'id'>): Voter => {
-  const voters = getVoters();
-  const newVoter = {
-    id: voters.length ? Math.max(...voters.map(v => v.id)) + 1 : 1,
-    ...voter,
-  };
-  
-  localStorage.setItem('voters', JSON.stringify([...voters, newVoter]));
-  return newVoter;
+export const addVoter = async (voter: { usn: string; password: string }): Promise<any> => {
+  const response = await axios.post('/api/voters', voter);
+  return response.data;
 };
 
-export const bulkAddVoters = (count: number): Voter[] => {
-  const voters = getVoters();
-  const startId = voters.length ? Math.max(...voters.map(v => v.id)) + 1 : 1;
-  
-  const newVoters: Voter[] = [];
-  
-  for (let i = 0; i < count; i++) {
-    const id = startId + i;
-    newVoters.push({
-      id,
-      usn: `USN${String(id).padStart(3, '0')}`,
-      password: '123',
-      has_voted: false
-    });
-  }
-  
-  localStorage.setItem('voters', JSON.stringify([...voters, ...newVoters]));
-  return newVoters;
+export const bulkAddVoters = async (count: number): Promise<any[]> => {
+  const response = await axios.post('/api/voters/bulk', { count });
+  return response.data;
 };
 
-export const validateVoterLogin = (usn: string, password: string): Voter | null => {
-  const voters = getVoters();
-  const voter = voters.find(v => v.usn === usn && v.password === password);
-  return voter || null;
+export const validateVoterLogin = async (usn: string, password: string): Promise<any> => {
+  const response = await axios.post('/api/voters/login', { usn, password });
+  return response.data;
 };
 
-export const updateVoterStatus = (id: number, has_voted: boolean): void => {
-  const voters = getVoters();
-  const updatedVoters = voters.map(voter => 
-    voter.id === id ? { ...voter, has_voted } : voter
-  );
-  
-  localStorage.setItem('voters', JSON.stringify(updatedVoters));
+export const updateVoterStatus = async (id: number, has_voted: boolean): Promise<void> => {
+  await axios.put(`/api/voters/${id}`, { has_voted });
 };
 
-export const resetVoterStatus = (): Voter[] => {
-  const voters = getVoters();
-  const resetVoters = voters.map(voter => ({
-    ...voter,
-    has_voted: false
-  }));
-  
-  localStorage.setItem('voters', JSON.stringify(resetVoters));
-  return resetVoters;
+export const resetVoterStatus = async (): Promise<void> => {
+  await axios.put('/api/voters/reset');
 };
 
 // Candidate functions
-export const getCandidates = (): Candidate[] => {
-  return JSON.parse(localStorage.getItem('candidates') || '[]');
+export const getCandidates = async (): Promise<any[]> => {
+  const response = await axios.get('/api/candidates');
+  return response.data;
 };
 
-export const addCandidate = (candidate: Omit<Candidate, 'id' | 'votes'>): Candidate => {
-  const candidates = getCandidates();
-  
-  if (candidates.length >= 5) {
-    throw new Error('Maximum of 5 candidates allowed');
-  }
-  
-  const newCandidate = {
-    id: candidates.length ? Math.max(...candidates.map(c => c.id)) + 1 : 1,
-    ...candidate,
-    votes: 0
-  };
-  
-  localStorage.setItem('candidates', JSON.stringify([...candidates, newCandidate]));
-  return newCandidate;
+export const addCandidate = async (candidate: { name: string; party: string }): Promise<any> => {
+  const response = await axios.post('/api/candidates', candidate);
+  return response.data;
 };
 
-export const updateCandidate = (id: number, updates: Partial<Omit<Candidate, 'id' | 'votes'>>): Candidate => {
-  const candidates = getCandidates();
-  const updatedCandidates = candidates.map(candidate => 
-    candidate.id === id ? { ...candidate, ...updates } : candidate
-  );
-  
-  localStorage.setItem('candidates', JSON.stringify(updatedCandidates));
-  return updatedCandidates.find(c => c.id === id) as Candidate;
+export const updateCandidate = async (id: number, updates: any): Promise<any> => {
+  const response = await axios.put(`/api/candidates/${id}`, updates);
+  return response.data;
 };
 
-export const deleteCandidate = (id: number): void => {
-  const candidates = getCandidates();
-  const filteredCandidates = candidates.filter(candidate => candidate.id !== id);
-  
-  localStorage.setItem('candidates', JSON.stringify(filteredCandidates));
+export const deleteCandidate = async (id: number): Promise<void> => {
+  await axios.delete(`/api/candidates/${id}`);
 };
 
-export const incrementVote = (candidateId: number): void => {
-  const candidates = getCandidates();
-  const updatedCandidates = candidates.map(candidate => 
-    candidate.id === candidateId 
-      ? { ...candidate, votes: candidate.votes + 1 } 
-      : candidate
-  );
-  
-  localStorage.setItem('candidates', JSON.stringify(updatedCandidates));
+export const incrementVote = async (candidateId: number): Promise<void> => {
+  await axios.put(`/api/candidates/${candidateId}/vote`);
 };
 
-export const resetCandidateVotes = (): Candidate[] => {
-  const candidates = getCandidates();
-  const resetCandidates = candidates.map(candidate => ({
-    ...candidate,
-    votes: 0
-  }));
-  
-  localStorage.setItem('candidates', JSON.stringify(resetCandidates));
-  return resetCandidates;
+export const resetCandidateVotes = async (): Promise<void> => {
+  await axios.put('/api/candidates/reset');
 };
 
 // Settings functions
-export const getSettings = (): Settings => {
-  const settings = JSON.parse(localStorage.getItem('settings') || '{}') as Settings;
-  
-  // Ensure previous_elections is always an array
-  if (!settings.previous_elections) {
-    settings.previous_elections = [];
-  }
-  
-  return settings;
+export const getSettings = async (): Promise<any> => {
+  const response = await axios.get('/api/settings');
+  return response.data;
 };
 
-export const updateSettings = (updates: Partial<Settings>): Settings => {
-  const settings = getSettings();
-  const updatedSettings = { ...settings, ...updates };
-  
-  localStorage.setItem('settings', JSON.stringify(updatedSettings));
-  return updatedSettings;
+export const updateSettings = async (updates: any): Promise<any> => {
+  const response = await axios.put('/api/settings', updates);
+  return response.data;
 };
 
-export const startElection = (): Settings => {
-  return updateSettings({ election_status: 'ongoing' });
+export const startElection = async (): Promise<any> => {
+  const response = await axios.post('/api/election/start');
+  return response.data;
 };
 
-export const endElection = (): Settings => {
-  const currentSettings = getSettings();
-  
-  // Ensure previous_elections exists and is an array
-  if (!currentSettings.previous_elections) {
-    currentSettings.previous_elections = [];
-  }
-  
-  const previousElection: PreviousElection = {
-    name: currentSettings.election_name || `Election ${currentSettings.previous_elections.length + 1}`,
-    end_date: new Date().toISOString(),
-    winners: getCandidates()
-      .sort((a, b) => b.votes - a.votes)
-      .filter((c, i, arr) => c.votes > 0 && c.votes === arr[0].votes)
-      .map(c => c.name)
-  };
-  
-  return updateSettings({ 
-    election_status: 'ended',
-    results_visible: true,
-    previous_elections: [...currentSettings.previous_elections, previousElection]
-  });
+export const endElection = async (): Promise<any> => {
+  const response = await axios.post('/api/election/end');
+  return response.data;
 };
 
-export const resetElection = (): Settings => {
-  return updateSettings({ 
-    election_status: 'not_started',
-    results_visible: false
-  });
-};
-
-// Initialize the database on module import
-initializeDB();
-
-// Export a function to reset the database (for testing)
-export const resetDB = (): void => {
-  localStorage.removeItem('admin');
-  localStorage.removeItem('voters');
-  localStorage.removeItem('candidates');
-  localStorage.removeItem('settings');
-  initializeDB();
+export const resetElection = async (): Promise<any> => {
+  const response = await axios.post('/api/election/reset');
+  return response.data;
 };
