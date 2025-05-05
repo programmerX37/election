@@ -22,8 +22,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ElectionProvider>
       <TooltipProvider>
-        <SidebarProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <SidebarProvider>
             <div className="flex min-h-screen w-full">
               <AppSidebar />
               <div className="flex-1">
@@ -38,10 +38,10 @@ const App = () => (
                 </Routes>
               </div>
             </div>
-          </BrowserRouter>
+          </SidebarProvider>
           <Toaster />
           <Sonner />
-        </SidebarProvider>
+        </BrowserRouter>
       </TooltipProvider>
     </ElectionProvider>
   </QueryClientProvider>
