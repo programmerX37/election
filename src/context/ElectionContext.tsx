@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as db from '@/lib/db';
+import { toast } from "@/components/ui/use-toast";
 
 interface ElectionContextType {
   admin: db.Admin | null;
@@ -8,20 +9,20 @@ interface ElectionContextType {
   candidates: db.Candidate[];
   voters: db.Voter[];
   settings: db.Settings;
-  loginAdmin: (username: string, password: string) => boolean;
-  loginVoter: (usn: string, password: string) => boolean;
+  loginAdmin: (username: string, password: string) => Promise<boolean>;
+  loginVoter: (usn: string, password: string) => Promise<boolean>;
   logoutAdmin: () => void;
   logoutVoter: () => void;
-  addCandidate: (candidate: Omit<db.Candidate, 'id' | 'votes'>) => db.Candidate;
-  updateCandidate: (id: number, updates: Partial<Omit<db.Candidate, 'id' | 'votes'>>) => db.Candidate;
-  deleteCandidate: (id: number) => void;
-  addVoter: (voter: Omit<db.Voter, 'id'>) => db.Voter;
-  bulkAddVoters: (count: number) => db.Voter[];
-  submitVote: (candidateId: number) => void;
-  startElection: () => void;
-  endElection: () => void;
-  resetElection: () => void;
-  updateSettings: (updates: Partial<db.Settings>) => void;
+  addCandidate: (candidate: Omit<db.Candidate, 'id' | 'votes'>) => Promise<db.Candidate>;
+  updateCandidate: (id: number, updates: Partial<Omit<db.Candidate, 'id' | 'votes'>>) => Promise<db.Candidate>;
+  deleteCandidate: (id: number) => Promise<void>;
+  addVoter: (voter: Omit<db.Voter, 'id' | 'has_voted'>) => Promise<db.Voter>;
+  bulkAddVoters: (count: number) => Promise<db.Voter[]>;
+  submitVote: (candidateId: number) => Promise<void>;
+  startElection: () => Promise<void>;
+  endElection: () => Promise<void>;
+  resetElection: () => Promise<void>;
+  updateSettings: (updates: Partial<db.Settings>) => Promise<void>;
 }
 
 const ElectionContext = createContext<ElectionContextType | undefined>(undefined);
@@ -34,31 +35,61 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [settings, setSettings] = useState<db.Settings>({
     election_status: 'not_started',
     results_visible: false,
-    election_name: '',
+    election_name: 'Election',
     previous_elections: []
   });
 
+  // Fetch initial data
   useEffect(() => {
-    setCandidates(db.getCandidates());
-    setVoters(db.getVoters());
-    setSettings(db.getSettings());
+    const fetchData = async () => {
+      try {
+        const [candidatesData, votersData, settingsData] = await Promise.all([
+          db.getCandidates(),
+          db.getVoters(),
+          db.getSettings()
+        ]);
+        
+        setCandidates(candidatesData);
+        setVoters(votersData);
+        setSettings(settingsData);
+      } catch (error) {
+        console.error("Failed to fetch initial data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch data. Please refresh the page.",
+          variant: "destructive"
+        });
+      }
+    };
+    
+    fetchData();
   }, []);
 
-  const loginAdmin = (username: string, password: string): boolean => {
-    const isValid = db.validateAdminLogin(username, password);
-    if (isValid) {
-      setAdmin({ id: 1, username, password });
+  const loginAdmin = async (username: string, password: string): Promise<boolean> => {
+    try {
+      const isValid = await db.validateAdminLogin(username, password);
+      if (isValid) {
+        setAdmin({ id: 1, username, password });
+      }
+      return isValid;
+    } catch (error) {
+      console.error("Admin login error:", error);
+      return false;
     }
-    return isValid;
   };
 
-  const loginVoter = (usn: string, password: string): boolean => {
-    const voter = db.validateVoterLogin(usn, password);
-    if (voter) {
-      setVoter(voter);
-      return true;
+  const loginVoter = async (usn: string, password: string): Promise<boolean> => {
+    try {
+      const voter = await db.validateVoterLogin(usn, password);
+      if (voter) {
+        setVoter(voter);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Voter login error:", error);
+      return false;
     }
-    return false;
   };
 
   const logoutAdmin = () => {
@@ -69,77 +100,142 @@ export const ElectionProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setVoter(null);
   };
 
-  const addCandidate = (candidate: Omit<db.Candidate, 'id' | 'votes'>) => {
-    const newCandidate = db.addCandidate(candidate);
-    setCandidates(db.getCandidates());
-    return newCandidate;
-  };
-
-  const updateCandidate = (id: number, updates: Partial<Omit<db.Candidate, 'id' | 'votes'>>) => {
-    const updated = db.updateCandidate(id, updates);
-    setCandidates(db.getCandidates());
-    return updated;
-  };
-
-  const deleteCandidate = (id: number) => {
-    db.deleteCandidate(id);
-    setCandidates(db.getCandidates());
-  };
-
-  const addVoter = (voter: Omit<db.Voter, 'id'>) => {
-    const newVoter = db.addVoter(voter);
-    setVoters(db.getVoters());
-    return newVoter;
-  };
-
-  const bulkAddVoters = (count: number) => {
-    const newVoters = db.bulkAddVoters(count);
-    setVoters(db.getVoters());
-    return newVoters;
-  };
-
-  const submitVote = (candidateId: number) => {
-    if (voter) {
-      db.updateVoterStatus(voter.id, true);
-      db.incrementVote(candidateId);
-      
-      setVoter({ ...voter, has_voted: true });
-      setCandidates(db.getCandidates());
-      setVoters(db.getVoters());
+  const addCandidate = async (candidate: Omit<db.Candidate, 'id' | 'votes'>) => {
+    try {
+      const newCandidate = await db.addCandidate(candidate);
+      const updatedCandidates = await db.getCandidates();
+      setCandidates(updatedCandidates);
+      return newCandidate;
+    } catch (error) {
+      console.error("Error adding candidate:", error);
+      throw error;
     }
   };
 
-  const startElection = () => {
-    const updatedSettings = db.startElection();
-    setSettings(updatedSettings);
+  const updateCandidate = async (id: number, updates: Partial<Omit<db.Candidate, 'id' | 'votes'>>) => {
+    try {
+      const updated = await db.updateCandidate(id, updates);
+      const updatedCandidates = await db.getCandidates();
+      setCandidates(updatedCandidates);
+      return updated;
+    } catch (error) {
+      console.error("Error updating candidate:", error);
+      throw error;
+    }
   };
 
-  const endElection = () => {
+  const deleteCandidate = async (id: number) => {
     try {
-      const updatedSettings = db.endElection();
+      await db.deleteCandidate(id);
+      const updatedCandidates = await db.getCandidates();
+      setCandidates(updatedCandidates);
+    } catch (error) {
+      console.error("Error deleting candidate:", error);
+      throw error;
+    }
+  };
+
+  const addVoter = async (voter: Omit<db.Voter, 'id' | 'has_voted'>) => {
+    try {
+      const newVoter = await db.addVoter(voter);
+      const updatedVoters = await db.getVoters();
+      setVoters(updatedVoters);
+      return newVoter;
+    } catch (error) {
+      console.error("Error adding voter:", error);
+      throw error;
+    }
+  };
+
+  const bulkAddVoters = async (count: number) => {
+    try {
+      const newVoters = await db.bulkAddVoters(count);
+      const updatedVoters = await db.getVoters();
+      setVoters(updatedVoters);
+      return newVoters;
+    } catch (error) {
+      console.error("Error adding voters in bulk:", error);
+      throw error;
+    }
+  };
+
+  const submitVote = async (candidateId: number) => {
+    try {
+      if (voter) {
+        await db.updateVoterStatus(voter.id, true);
+        await db.incrementVote(candidateId);
+        
+        setVoter({ ...voter, has_voted: true });
+        
+        // Refresh candidates and voters data
+        const [updatedCandidates, updatedVoters] = await Promise.all([
+          db.getCandidates(),
+          db.getVoters()
+        ]);
+        
+        setCandidates(updatedCandidates);
+        setVoters(updatedVoters);
+      }
+    } catch (error) {
+      console.error("Error submitting vote:", error);
+      throw error;
+    }
+  };
+
+  const startElection = async () => {
+    try {
+      const updatedSettings = await db.startElection();
+      setSettings(updatedSettings);
+    } catch (error) {
+      console.error("Error starting election:", error);
+      throw error;
+    }
+  };
+
+  const endElection = async () => {
+    try {
+      const updatedSettings = await db.endElection();
       setSettings(updatedSettings);
       
-      // Ensure candidates are refreshed with latest vote counts
-      setCandidates(db.getCandidates());
+      // Make sure to refresh candidates with final vote counts
+      const updatedCandidates = await db.getCandidates();
+      setCandidates(updatedCandidates);
     } catch (error) {
       console.error("Error ending election:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem ending the election. Please try again.",
+        variant: "destructive"
+      });
+      throw error;
     }
   };
 
-  const resetElection = () => {
-    const updatedSettings = db.resetElection();
-    setSettings(updatedSettings);
-    
-    const resetCandidates = db.resetCandidateVotes();
-    setCandidates(resetCandidates);
-    
-    const resetVoters = db.resetVoterStatus();
-    setVoters(resetVoters);
+  const resetElection = async () => {
+    try {
+      const [updatedSettings, resetCandidates, resetVoters] = await Promise.all([
+        db.resetElection(),
+        db.resetCandidateVotes(),
+        db.resetVoterStatus()
+      ]);
+      
+      setSettings(updatedSettings);
+      setCandidates(resetCandidates);
+      setVoters(resetVoters);
+    } catch (error) {
+      console.error("Error resetting election:", error);
+      throw error;
+    }
   };
 
-  const updateSettings = (updates: Partial<db.Settings>) => {
-    const updatedSettings = db.updateSettings(updates);
-    setSettings(updatedSettings);
+  const updateSettings = async (updates: Partial<db.Settings>) => {
+    try {
+      const updatedSettings = await db.updateSettings(updates);
+      setSettings(updatedSettings);
+    } catch (error) {
+      console.error("Error updating settings:", error);
+      throw error;
+    }
   };
 
   const value = {
